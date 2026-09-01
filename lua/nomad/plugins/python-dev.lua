@@ -9,7 +9,6 @@ return {
 			{ "nvim-telescope/telescope.nvim", branch = "0.1.x" },
 		},
 		lazy = false,
-		branch = "regexp", -- Use the regexp branch for better performance
 		config = function()
 			require("venv-selector").setup({
 				settings = {

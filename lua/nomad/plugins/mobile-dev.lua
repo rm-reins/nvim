@@ -93,34 +93,24 @@ return {
 	},
 	{
 		"rest-nvim/rest.nvim",
+		tag = "v3.13.0",
 		ft = "http",
-		dependencies = { "nvim-lua/plenary.nvim" },
-		config = function()
-			require("rest-nvim").setup({
-				result_split_horizontal = false,
-				result_split_in_place = false,
-				skip_ssl_verification = false,
-				encode_url = true,
-				highlight = {
-					enabled = true,
-					timeout = 150,
+		dependencies = { "nvim-treesitter/nvim-treesitter" },
+		init = function()
+			vim.g.rest_nvim = {
+				request = {
+					skip_ssl_verification = false,
+					hooks = { encode_url = true },
 				},
-				result = {
-					show_url = true,
-					show_http_info = true,
-					show_headers = true,
-					formatters = {
-						json = "jq",
-						html = function(body)
-							return vim.fn.system({"tidy", "-i", "-q", "-"}, body)
-						end
-					},
+				response = {
+					hooks = { decode_url = true, format = true },
 				},
-			})
-
-			vim.keymap.set("n", "<leader>rr", "<Plug>RestNvim", { desc = "Run HTTP request" })
-			vim.keymap.set("n", "<leader>rp", "<Plug>RestNvimPreview", { desc = "Preview HTTP request" })
-			vim.keymap.set("n", "<leader>rl", "<Plug>RestNvimLast", { desc = "Run last HTTP request" })
+				highlight = { enable = true, timeout = 150 },
+			}
 		end,
+		keys = {
+			{ "<leader>rr", "<cmd>Rest run<cr>", desc = "Run HTTP request", ft = "http" },
+			{ "<leader>rl", "<cmd>Rest run last<cr>", desc = "Run last HTTP request", ft = "http" },
+		},
 	},
 } 
